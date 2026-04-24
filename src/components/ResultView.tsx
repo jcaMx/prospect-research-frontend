@@ -3,7 +3,7 @@ import type {
   ExperienceEntry,
   ProspectResponse,
 } from "../api/client";
-import { API_BASE, SLIDES_API_BASE } from "../api/config";
+import { API_BASE } from "../api/config";
 
 type ResultViewProps = {
   response: ProspectResponse;
@@ -77,13 +77,19 @@ const toTitleCase = (text: string) => {
     .join(" ");
 };
 
-const triggerDownload = async (path: string) => {
+const resolveSafeDownloadUrl = (path: string) => {
   const base = new URL(API_BASE);
-  const url = new URL(path, base);
+  const incomingUrl = new URL(path, base);
 
-  if (url.origin !== base.origin || !url.pathname.startsWith("/output/")) {
+  if (!incomingUrl.pathname.startsWith("/output/")) {
     throw new Error("Blocked unsafe download URL.");
   }
+
+  return new URL(`${incomingUrl.pathname}${incomingUrl.search}`, base);
+};
+
+const triggerDownload = async (path: string) => {
+  const url = resolveSafeDownloadUrl(path);
 
   const res = await fetch(url.toString());
   if (!res.ok) throw new Error(`Failed to download (${res.status})`);
@@ -318,7 +324,7 @@ export default function ResultView({
                     onClick={() => {
                       if (!audioDownloadUrl) return;
                       window.open(
-                        new URL(audioDownloadUrl, SLIDES_API_BASE).toString(),
+                        new URL(audioDownloadUrl, API_BASE).toString(),
                         "_blank"
                       );
                     }}
