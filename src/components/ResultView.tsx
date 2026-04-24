@@ -3,7 +3,7 @@ import type {
   ExperienceEntry,
   ProspectResponse,
 } from "../api/client";
-import { API_BASE } from "../api/config";
+import { API_BASE, SLIDES_API_BASE } from "../api/config";
 
 type ResultViewProps = {
   response: ProspectResponse;
@@ -317,7 +317,10 @@ export default function ResultView({
                     className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-60"
                     onClick={() => {
                       if (!audioDownloadUrl) return;
-                      window.open(new URL(audioDownloadUrl, API_BASE).toString(), "_blank");
+                      window.open(
+                        new URL(audioDownloadUrl, SLIDES_API_BASE).toString(),
+                        "_blank"
+                      );
                     }}
                     disabled={!audioDownloadUrl}
                   >

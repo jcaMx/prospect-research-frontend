@@ -1,5 +1,4 @@
-
-import { API_BASE } from "./config";
+import { API_BASE, SLIDES_API_BASE } from "./config";
 
 export type ProspectFormData = {
   name: string;
@@ -87,7 +86,7 @@ export const runProspect = async (data: ProspectFormData): Promise<ProspectRespo
 export const generateSlides = async (
   data: SlidesRequestPayload
 ): Promise<SlidesStartResponse> => {
-  const response = await fetch(`${API_BASE}/prospect/slides`, {
+  const response = await fetch(`${SLIDES_API_BASE}/prospect/slides`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -100,7 +99,7 @@ export const generateSlides = async (
 export const getSlidesStatus = async (
   requestId: string
 ): Promise<SlidesStatusResponse> => {
-  const response = await fetch(`${API_BASE}/prospect/slides/${requestId}`);
+  const response = await fetch(`${SLIDES_API_BASE}/prospect/slides/${requestId}`);
 
   if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
   return response.json();
